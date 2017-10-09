@@ -1,28 +1,429 @@
+/* CSS RESET */
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+/*    END CSS RESET*/
+
+
+html, body, .App {
+  position: absolute;
+  height: 1920px;
+  width: 1080px;
+}
+
 .App {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+h1 {
+  margin: 55px 0;
+  font-size: 5em;
 }
 
-.App-header {
-  background-color: #222;
+/* _______________ MAIN SCREEN ______________ */
+
+#welcome {
+  width: 1080px;
+  margin-top: 10%;
+}
+
+#screen {
+  width: 1080px;
+  box-sizing: border-box;
+}
+
+#button-container {
+  margin-top: 50px;
+}
+
+.btn {
+  display: flex;
+  height: 120px;
+  width: 120px;
+  color: white;
+  background-color: gray;
+  margin: 0 10px;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  border-radius: 15px;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+video{ 
+  display: none;
+}
+
+#video-or-gif {
+  margin: auto;
+}
+
+
+#video-div, #gif-result {
+  display: flex;
+  -ms-flex-item-align: center;
+  align-self: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -ms-flex-align: center;
+  align-items: center;
+  width: 900px;
+}
+
+#option-box, #countdown-box, #loading-icon {
+  display: flex;
+  position: absolute;
   height: 150px;
-  padding: 20px;
+  width: 250px;
+  padding: 15px;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  border-radius: 15px;
+}
+
+#option-box {
+  background-color: white;
+}
+
+#countdown-box {
+  color: white;
+  font-size: 3em;
+}
+
+#loading-icon {
   color: white;
 }
 
-.App-title {
+#two-btns {
+  display: flex;
+  flex-direction: row;
+}
+
+.option-btn {
+  height: 100px;
+  width: 100px;
+  background-color: lightblue;
+  color: white;
+  margin: 10px;
+}
+
+#gif-row {
+  width: 930px;
+  margin: auto;
+}
+
+.miniPic {
+  position: relative;
+  margin: 5px;
+  z-index: 2;
+}
+
+.hidden {
+  display: none;
+}
+
+#start-over-btn {
+  position: absolute;
+  left: 2%;
+  top: 2%;
+  height: 50px;
+}
+
+#logo {
+  position: absolute;
+  bottom: 5%;
+  z-index: 1;
+}
+
+/*_____________ SHARE SCREEN ____________________ */
+
+#share-view {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0,0,0,0.5);
+  justify-content: center;
+  z-index: 2;
+}
+
+#share-box{
+  position: absolute;
+  top: 10%;
+}
+
+#share-buttons {
+  display: flex;
+  background-color: white;
+  padding: 35px;
+  justify-content: space-around;
+}
+
+.share-button {
+  display: flex;
+  height: 50px;
+  width: 50px;
+  color: white;
+  background-color: gray;
+  margin: 0 10px;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  border-radius: 100%;
+}
+
+/* ____________________________ POP-UPS ____________________________ */
+
+.pop-up {
+  width: 325px;
+  height: 130%;
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: white;
+
+  padding: 50px;
+  z-index: 2;
+}
+
+.x-box {
+  display: flex;
+  position: absolute;
+  height: 50px;
+  width: 50px;
+  right: -5%;
+  top: -5%;
+  background-color: white;
   font-size: 1.5em;
+  line-height: 1.5em;
+  color: red;
+  border-radius: 100%;
+  align-items: center;
+  justify-content: center;
 }
 
-.App-intro {
-  font-size: large;
+input {
+  margin: 25px 0;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+#dialogue-box {
+  top: 10%;
+  background-color: rgba(0,0,0,0.8);
 }
+
+#disclaimer-div {
+  position: absolute;
+  top: 10%;
+  z-index: 2;
+}
+
+#disclaimer {
+  display: flex;
+  position: absolute;
+  height: 350px;
+  margin-top: 10%;
+  left: 20%;
+  z-index: 2;
+  background-color: rgba(0,0,0,0.8);
+  color: white;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#disclaimer p {
+  font-size: 2em;
+  width: 75%;
+  margin-bottom: 50px;
+}
+
+  /* POP-UP ANIMATIONS */
+
+  .dialogue-enter {
+    opacity: 0.01;
+  }
+  
+  .dialogue-enter.dialogue-enter-active {
+    opacity: 0.8;
+    transition: opacity 500ms ease-in;
+  }
+  
+  .dialogue-leave {
+    opacity: 0.8;
+  }
+  
+  .dialogue-leave.dialogue-leave-active {
+    opacity: 0.01;
+    transition: opacity 500ms ease-in;
+  }
+
+  .dialogue-appear {
+    opacity: 0.01;
+  }
+  
+  .dialogue-appear.dialogue-appear-active {
+    opacity: 0.8;
+    transition: opacity 500ms ease-in;
+  }
+
+  /*  KEYBOARD  */
+
+  .keyboard-div {
+    display: flex;
+    width: 100%;
+    position: fixed;
+    bottom: 30%;
+    left: 0%;
+    padding: 25px 0;
+    background-color: rgba(0,0,0,0.8);
+    justify-content: center;
+    z-index: 2;
+  }
+
+  .keyboard {
+    width: 900px;
+    font-size: 1.7em;
+    font-weight: 800;
+    color: white;
+  }
+
+  .keyboard-row{
+    width: 100%;
+  }
+
+  .key {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    box-sizing: border-box;
+    border-radius: 15px;
+    padding: 25px;
+    margin: 5px;
+    background-color: gray;
+    box-shadow: 5px 5px 5px black;
+  }
+
+  .key:active {
+    box-shadow: none;
+  }
+
+  #row1 {
+    padding: 0 10px 0 0;
+  }
+
+  #row2 {
+    padding: 0 20px;
+  }
+  
+  #row3 {
+    padding-left: 50px;
+  }
+  
+  #row4 {
+    padding-left: 20px;
+  }
+
+  #row5 {
+    justify-content: space-around;
+  }
+
+  #space {
+    width: 400px;
+  }
+
+  .uppercase-shift {
+    color: blue;
+  }
+
+  /* KEYBOARD ANIMATION */
+
+  .keyboard-enter {
+    bottom: -50%;
+  }
+  
+  .keyboard-enter.keyboard-enter-active {
+    bottom: 30%;
+    transition: bottom 500ms ease-in;
+  }
+  
+  .keyboard-leave {
+    bottom: 30%;
+  }
+  
+  .keyboard-leave.keyboard-leave-active {
+    bottom: -50%;
+    transition: bottom 500ms ease-in;
+  }
+
+  .keyboard-appear {
+    bottom: -50%;
+  }
+  
+  .keyboard-appear.keyboard-appear-active {
+    bottom: 30%;
+    transition: bottom 500ms ease-in;
+  }
+

@@ -1,0 +1,15 @@
+{
+  "archive": "test",
+  "disclaimer": false,
+  "survey": false,
+  "termsConditions": false,
+  "digitalProps": true,
+  "instagramFilters": false,
+  "email": true,
+  "text": true,
+  "facebook": false,
+  "twitter": false,
+  "print": true,
+  "gif": true,
+  "locationCode": "test"
+}
