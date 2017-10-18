@@ -127,7 +127,7 @@ video{
   justify-content: center;
   -ms-flex-align: center;
   align-items: center;
-  width: 900px;
+  width: 720px;
 }
 
 #option-box, #countdown-box, #loading-icon {

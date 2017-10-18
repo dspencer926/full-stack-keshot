@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import image from '../mustache.png';
+import images from './LoadImages';
+// import image2 from '../sunglasses.png'
 import DraggableImage from './DraggableImage';
 import Buttons from './Buttons'
 
@@ -14,6 +15,7 @@ class ClickDrag extends Component {
       dragging: false,
       images: {},
       imageCount: 0,
+      digitalPropNames: [],
     }
     this.refresh = this.refresh.bind(this);
     // this.addPic = this.addPic.bind(this);
@@ -26,9 +28,24 @@ class ClickDrag extends Component {
   }
 
   componentDidMount() {
+    fetch('/digitalprops/file_names', {
+      method: 'GET',
+    }).then(res => {
+      console.log(res);
+      return res.json();
+    }).then(json => {
+      this.setState({ digitalPropNames: json.files})
+    });
+
+    // let newImage = images.mustache;
+    // console.log(newImage.width);
+    // console.log(newImage.naturalWidth);
+    // this.setState({
+    //   images: newImage,
+    // })
     this.canv = document.getElementById('canv');
     let ctx = this.canv.getContext('2d');
-    this.original = new Image();
+    this.original = new Image(720, 720);
     this.original.src = this.props.photo;
     this.original.onload = () => {
       ctx.drawImage(this.original, 0, 0);
@@ -49,13 +66,15 @@ class ClickDrag extends Component {
     let imageName = null;
     for (var image in this.state.images) {
       let instance = this.state.images[image]
+      console.log('instance', instance)
       if (this.withinBox(x, y, instance)) 
         { if (instance.zIndex > zIndex) imageName = instance.name }
     }
     return imageName;
   }
 
-  withinBox(xp, yp, instance) {       // tests if user clicked within item box
+  withinBox(xp, yp, instance) { 
+    console.log(instance)      // tests if user clicked within item box
     let c = instance.corners;
     let one = this.calc(c.nw.x, c.nw.y, c.ne.x, c.ne.y, xp, yp);
     let two = this.calc(c.ne.x, c.ne.y, c.se.x, c.se.y, xp, yp);
@@ -75,9 +94,9 @@ class ClickDrag extends Component {
     
   }
 
-  handleMouseDown(e) {
-    let x = e.clientX - this.canv.offsetLeft;
-    let y = e.clientY - this.canv.offsetTop;
+  handleMouseDown(e, type = 'click') {
+    let x = type === 'touch' ? e.touches[0].clientX - this.canv.offsetLeft : e.clientX - this.canv.offsetLeft;
+    let y = type === 'touch' ? e.touches[0].clientY - this.canv.offsetTop : e.clientY - this.canv.offsetTop;
     let imageName = this.checkItems(x, y);
     if (imageName) {
       if (!this.state.images[imageName].selected) {
@@ -110,12 +129,12 @@ class ClickDrag extends Component {
     });
   }
 
-  handleMouseMove(e) {
+  handleMouseMove(e, type = 'click') {
     let mouseDownCoords = this.state.mouseDownCoords;
     let canv = document.getElementById('canv');
     let ctx = canv.getContext('2d');
-    let offsetX = e.clientX - canv.offsetLeft;
-    let offsetY = e.clientY - canv.offsetTop;
+    let offsetX = type === 'touch' ? e.touches[0].clientX - canv.offsetLeft : e.clientX - canv.offsetLeft;
+    let offsetY = type === 'touch' ? e.touches[0].clientY - canv.offsetTop : e.clientY - canv.offsetTop;
     let mouseMovementX = offsetX - mouseDownCoords.x;
     let mouseMovementY = offsetY - mouseDownCoords.y;
     if (this.state.action) {
@@ -164,10 +183,9 @@ class ClickDrag extends Component {
     obj[newPic.name].zIndex = zIndex;
     this.setState({
       images: obj,
-    }, () => this.state.images[name].location())
+    }, () => console.log(this.state.images))
     let ctx = canv.getContext('2d');
     newPic = await newPic.generate();
-    console.log(newPic)
     ctx.drawImage(this.original, 0, 0);
     ctx.drawImage(newPic, 0, 0);
   }
@@ -177,10 +195,14 @@ class ClickDrag extends Component {
       this.state.images[this.state.currentlyActive].deselect();
       this.refresh();
     }
-    let file = this.canv.toDataURL('image/jpg');
+    let editCanv = document.getElementById('edit-canv')
+    let editCtx = editCanv.getContext('2d');
+    editCtx.drawImage(this.canv, 0, 0);
+    editCtx.drawImage(this.props.overlay, 0, 0);
+    let file = editCanv.toDataURL('image/jpg');
     // get gif from multiple images w/ digital props
     // also get thumbnail
-    this.props.getFiles(file, undefined, 'Share')
+    this.props.getFiles(file, undefined, 'Share');
   }
 
 
@@ -192,16 +214,38 @@ class ClickDrag extends Component {
       >
         <canvas 
           id='canv' 
-          height='900' 
-          width='900'
+          width='720'
+          height='720' 
           onMouseDown={(e) => this.handleMouseDown(e)}
           onMouseUp={this.handleMouseUp}
-          onMouseMove={(e) => this.handleMouseMove(e)} />
-          <Buttons 
-            finalizePic={this.finalizePic}
-            btnStatus={'digitalProps'}
-          />
-        <img id='pic' height='350' width='350' src={image} onClick={(e) => this.addPic(e)} />
+          onMouseMove={(e) => this.handleMouseMove(e)} 
+          onTouchStart={(e) => this.handleMouseDown(e, 'touch')}
+          onTouchEnd={this.handleMouseUp}
+          onTouchMove={(e) => this.handleMouseMove(e, 'touch')} 
+        />
+        <canvas
+          id='edit-canv'
+          width='720'
+          height='720'
+          style={{display: 'none'}}
+        />
+        <Buttons 
+          finalizePic={this.finalizePic}
+          btnStatus={'digitalProps'}
+        />
+        <div id='digital-props'>
+          {this.state.digitalPropNames.map(img => {
+            return (
+              <img 
+                src={`/digitalprops/${img}`} 
+                id={img}
+                key={img}
+                onClick={(e) => {this.addPic(e)}}
+              />
+            )
+          })}
+        </div>
+        {/*<img id='pic2' height='350' width='350' src={image2} onClick={(e) => this.addPic(e)} />*/}
       </div>
     );
   }

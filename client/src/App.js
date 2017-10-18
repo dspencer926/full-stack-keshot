@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import settings from './settings.json';
+// import settings from './settings.json';
 import sessionInfo from './sessionInfo.json';
 import MainView from './component/MainView';
 import ShareView from './component/ShareView';
@@ -24,9 +24,20 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.setState({
-      settings: settings,
-      sessionInfo: sessionInfo,
+    let settings;
+    fetch('/settings', {
+      method: 'GET',
+    }).then(res => {
+      return res.json();
+    }).then(json => {
+      settings = json;
+      let overlay = new Image(720, 720);
+      overlay.src = '/overlay';
+      settings.overlay = overlay;
+      this.setState({
+        settings,
+        sessionInfo,
+      })
     })
   }
 
@@ -60,14 +71,14 @@ class App extends Component {
 
   render() {
     let view;
-    let logo = <img id='logo' height='400' width='400' src='./logo.png' />;
+    let logo = <img id='logo' height='400' width='400' src='/logo' />;
     switch (this.state.status) {
       case 'Welcome': 
         view = 
           <MainView
             changeMainStatus={this.changeMainStatus}
             setPhotoURL={this.setPhotoURL}
-            settings={settings}
+            settings={this.state.settings}
             startOver={this.startOver}
             getFiles={this.getFiles}
           />
@@ -77,6 +88,7 @@ class App extends Component {
           <ClickDrag 
             photo={this.state.photo}
             getFiles={this.getFiles}
+            overlay={this.state.settings.overlay}
           />
         break;
       case 'Share':

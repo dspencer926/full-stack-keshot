@@ -5,8 +5,8 @@ class DraggableImage {
     this.name = name;
     this.img = image;
     this.canv = document.createElement('canvas');
-    this.canv.width = 900;
-    this.canv.height = 900;
+    this.canv.width = 720;
+    this.canv.height = 720;
     this.ctx = this.canv.getContext('2d');
     this.x = 0;
     this.y = 0;
@@ -96,7 +96,6 @@ class DraggableImage {
     let rotateLeft = this.constructorRotateBox.left;
     let rotateTop = this.constructorRotateBox.top;
     if (this.selected) {
-    ctx.drawImage(images.resize, resizeLeft, resizeTop, 50, 50);
       ctx.beginPath();
       ctx.lineWidth = 1;
       ctx.strokeStyle = '#FFFFFF';
@@ -116,6 +115,8 @@ class DraggableImage {
       ctx.stroke();
       ctx.fillStyle = 'red';
       ctx.fill();
+      ctx.drawImage(images.resize, resizeLeft + 10, resizeTop + 10, 30, 30);
+      ctx.drawImage(images.rotate, rotateLeft + 5, rotateTop + 5, 40, 40);
     }
     return constructionCanv;
   }
@@ -125,8 +126,8 @@ class DraggableImage {
     let imageBox = this.construct();
     if (this.radian) {
       let c = document.createElement('canvas');
-      c.width = 900;
-      c.height = 900;
+      c.width = 720;
+      c.height = 720;
       let centerLeft = (c.width - this.width) / 2;
       let centerTop = (c.height - this.height) / 2;
       let ctx = c.getContext('2d');

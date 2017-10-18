@@ -58,7 +58,7 @@ class Screen extends Component {
     let canv = document.getElementById('canv').getContext('2d');
     let v = this.video;
     if (v.paused || v.ended) return false;
-    canv.drawImage(v, -150, 0, 1200, 900);
+    canv.drawImage(v, -120, 0, 960, 720);
     if (this.state.overlay) {
       let coords = this.state.imageCoords;
       let image = document.getElementById('logo');
@@ -142,6 +142,7 @@ class Screen extends Component {
               let miniCanv = document.getElementById('mini-canv');
               // let startX = -((this.state.videoDimensions.width - this.state.videoDimensions.height) / 2);
               miniCanv.getContext('2d').drawImage(canv, 0, 0);
+              canv.getContext('2d').drawImage(this.props.settings.overlay, 0, 0);
               let jpg = canv.toDataURL("image/jpg");
               this.setState((prevState) => {return {
                 photoArray: prevState.photoArray.concat(jpg),
@@ -165,8 +166,8 @@ class Screen extends Component {
       gifShot.createGIF({
         'images': gifArray,
         'interval': 0.3,
-        'gifWidth': 900,
-        'gifHeight': 900,
+        'gifWidth': 720,
+        'gifHeight': 720,
       },(obj) => {
         if(!obj.error) {
           this.setState({
@@ -207,7 +208,7 @@ class Screen extends Component {
     let canv = document.getElementById('canv');
     let file = (this.state.photoType === 'jpg') ? canv.toDataURL('image/jpg') : this.state.currentGif;
     let type = this.state.photoType;
-    let status = this.props.settings.digitalProps ? 'Click' : 'Share';
+    let status = (this.props.settings.digitalProps && type === 'jpg') ? 'Click' : 'Share';
     // get thumbnail of first shot, also consider click/drag for gifs as well
     this.props.getFiles(file, type, status);
   }
@@ -242,10 +243,10 @@ class Screen extends Component {
                     {this.state.countDown && <div id='countdown-box'>{this.state.count}</div>}
                     {this.state.loadingGif && <div id='loading-icon'><i className="fa fa-spinner fa-pulse fa-5x" aria-hidden="true"></i></div> }
                     <canvas id='canv' 
-                      width={this.state.videoDimensions.height}
-                      height={this.state.videoDimensions.height}>
+                      width='720'
+                      height='720'>
                     </canvas>
-                    <video id="video" width="1200" height="900" src={this.state.cameraStream} onPlay={this.videoToCanvas}></video>
+                    <video id="video" width="960" height="720" src={this.state.cameraStream} onPlay={this.videoToCanvas}></video>
                   </div>
               }
                 <div>

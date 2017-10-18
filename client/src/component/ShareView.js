@@ -11,10 +11,12 @@ class ShareView extends Component {
       sessionInfo: null,
       dialogueBox: false,
       keyboardShowing: false,
+      inputText: '',
     }
     this.dialogueSet = this.dialogueSet.bind(this);
     this.getInput = this.getInput.bind(this);
     this.submitData = this.submitData.bind(this);
+    this.handleInput = this.handleInput.bind(this);
   }
 
   componentDidMount() {
@@ -30,34 +32,43 @@ class ShareView extends Component {
     })
     if (share === 'Print') {
       console.log(this.state.sessionInfo)
-      let newPrint = this.state.sessionInfo.PrintCount + 1;
+      let newPrint = this.state.sessionInfo.printCount + 1;
       let session = {...this.state.sessionInfo, PrintCount: newPrint}
       this.setState({
         sessionInfo: session
       }, () => {console.log(this.state.sessionInfo)})
     }
   }
+
+  handleInput(key) {
+    this.setState(prevState => { 
+      return {
+        inputText: prevState.inputText.concat(key),
+      }
+    })
+  }
   
   getInput(input) {
     let session = this.state.sessionInfo;
     switch (this.state.dialogueBox) {
       case 'Email':   // remember, you're going to want to make an array for multiple emails
-        session = {...this.state.sessionInfo, SenderEmail: input}
+        session = {...this.state.sessionInfo, senderEmail: input}
         break;
       case 'Text':     // see above ^^
-      session = {...this.state.sessionInfo, PhoneNumber: input}
+      session = {...this.state.sessionInfo, phoneNumber: input}
         break;
       case 'Facebook': 
-        session = {...this.state.sessionInfo, PostToFacebookFanPage: true}
+        session = {...this.state.sessionInfo, postToFacebookFanPage: true}
         break;
       case 'Twitter': 
-        session = {...this.state.sessionInfo, PostToTwitter: true}
+        session = {...this.state.sessionInfo, postToTwitter: true}
         break;
       }
       this.setState({
         sessionInfo: session,
         dialogueBox: false,
         keyboardShowing: false,
+        inputText: '',
       })
     }
     
@@ -84,17 +95,22 @@ class ShareView extends Component {
   }
 
   render() {
-    let keyboard = this.state.keyboardShowing && <Keyboard key={'keyboard'}/>;
+    let keyboard = this.state.keyboardShowing 
+      && <Keyboard 
+        key={'keyboard'}
+        handleInput={this.handleInput}
+      />;
     let dialogue = this.state.dialogueBox 
     && <DialogueBox 
-        mode={this.state.dialogueBox} 
+        mode={this.state.dialogueBox}
+        inputText={this.state.inputText} 
         getInput={this.getInput}
       />
     return (
       <div id='share-view'>
         <div id='share-box' className='flex-column' style={{alignItems: 'center' }}>
           <div className='x-box' onClick={this.submitData}>X</div>
-          <div id='picture-frame' width='675'>
+          <div id='picture-frame'>
             <img src={this.props.photo} />
           </div>
           <ShareButtons 

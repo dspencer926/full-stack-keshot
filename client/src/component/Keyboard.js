@@ -45,8 +45,7 @@ class Keyboard extends Component {
         })
       }
     }
-    console.log(key);
-    
+    this.props.handleInput(key);
   }
 
   render() {

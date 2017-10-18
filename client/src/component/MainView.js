@@ -91,7 +91,7 @@ class MainView extends Component {
           break;
         case 'confirm':
           this.setState({
-
+            
           });
           break;
       } 
